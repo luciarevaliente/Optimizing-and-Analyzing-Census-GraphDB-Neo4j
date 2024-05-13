@@ -17,7 +17,7 @@ MERGE (h:HABITATGES { Municipi: row.Municipi, Id_Llar: row.Id_Llar, Any_Padro: t
 
 // Importar dades dels individus
 LOAD CSV WITH HEADERS FROM 'file:\INDIVIDUAL.csv' AS row
-WITH row WHERE row.Id IS NOT "null" 
+WITH row WHERE row.Id <> "null" 
 MERGE (i:INDIVIDUAL { Id: row.Id, Year: toInteger(row.Year), name: row.name, surname: row.surname, second_surname: row.second_surname });
 
 //Arestes
