@@ -1,26 +1,19 @@
 //Constraints per unicitat
-
 CREATE CONSTRAINT unique_id_person FOR (i:INDIVIDUAL) REQUIRE i.Id is UNIQUE;
-
 CREATE CONSTRAINT unique_id_llar FOR (h:HABITATGE) REQUIRE h.Id_Llar is UNIQUE;
 
 //Constraints per que no sigui NULL la Id
-
 CREATE CONSTRAINT id_personExists FOR (i:INDIVIDUAL) REQUIRE i.Id is NOT NULL;
-
 CREATE CONSTRAINT id_llarExists FOR (h:HABITATGE) REQUIRE h.Id_Llar is NOT NULL;
 
 //Índex
-
 CREATE INDEX AnyPadroIndex FOR ()-[r:VIU]-() ON (r.Year)
-
+CREATE FULLTEXT INDEX IndividuNomCognoms FOR (i:INDIVIDUAL) ON EACH [i.name, i.surname, i.second_surname];
 
 // Importar dades dels habitatges
-
 LOAD CSV WITH HEADERS FROM 'file:\HABITATGES.csv' AS row
 WITH row WHERE row.Id_Llar IS NOT "null" AND row.Municipi IS NOT "null"
 MERGE (h:HABITATGES { Municipi: row.Municipi, Id_Llar: row.Id_Llar, Any_Padro: toInteger(row.Any_Padro), Carrer: row.Carrer, Numero: row.Numero });
-
 
 // Importar dades dels individus
 LOAD CSV WITH HEADERS FROM 'file:\INDIVIDUAL.csv' AS row
@@ -28,13 +21,11 @@ WITH row WHERE row.Id IS NOT "null"
 MERGE (i:INDIVIDUAL { Id: row.Id, Year: toInteger(row.Year), name: row.name, surname: row.surname, second_surname: row.second_surname });
 
 //Arestes
-
 LOAD CSV WITH HEADERS FROM 'file:\VIU.csv' AS row
 WITH row WHERE NOT row.IND IS "null" AND NOT row.HOUSE_ID IS "null"
 MATCH (i:INDIVIDUAL), (h:HABITATGES)
 WHERE row.IND = i.Id AND row.HOUSE_ID = h.Id_Llar
 CREATE (i)-[:VIU {Location:row.Location,Year: row.Year}]->(h);
-
 
 LOAD CSV WITH HEADERS FROM 'file:\SAME_AS.csv' AS row
 WITH row WHERE NOT row.Id_A IS "null" AND NOT row.Id_B IS "null"
@@ -47,7 +38,6 @@ WITH row WHERE NOT row.Id_A IS "null" AND NOT row.Id_B IS "null"
 MATCH (a:INDIVIDUAL),(b:INDIVIDUAL)
 WHERE row.Id_A = a.Id AND row.Id_B=b.Id 
 CREATE (b)-[:SAME_AS]->(a);
-
 
 LOAD CSV WITH HEADERS FROM 'file:\FAMILIA.csv' AS row
 WITH row WHERE NOT row.ID_1 IS "null" AND NOT row.ID_2 IS "null"
