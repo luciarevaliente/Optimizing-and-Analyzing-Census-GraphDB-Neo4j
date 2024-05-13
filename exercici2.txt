@@ -21,3 +21,18 @@ ORDER BY Year;
 CALL db.index.fulltext.queryNodes('IndividualNameIndex', 'Juan Magan Rodríguez')
 YIELD node, score
 RETURN id(node), node.name, node.surname, node.second_surname, score;
+
+//c - FUNCIONA
+CALL{
+    CALL db.index.fulltext.queryNodes('IndividuNomCognoms', 'benito julivert')
+    YIELD node, score
+    WITH node, score
+    ORDER BY score DESC
+    RETURN node
+    LIMIT 1
+} 
+WITH node
+MATCH (n:INDIVIDUAL)-[f:FAMILIA]-(m:INDIVIDUAL) 
+WHERE n = node AND f.Relacio IN ["hija", "hijo"]
+RETURN m.name, m.surname, m.second_surname, f.Relacio
+ORDER BY m.name
