@@ -1,1 +1,7 @@
+//a) Per a cada padró (any) de Sant Feliu de Llobregat (SFLL), retorna l’any de padró, el número d'habitants, i la llista de cognoms. Elimina duplicats i “nan”.
 
+
+//uso del indice de texto:
+CALL db.index.fulltext.queryNodes('IndividualNameIndex', 'Juan Magan Rodríguez')
+YIELD node, score
+RETURN id(node), node.name, node.surname, node.second_surname, score;
