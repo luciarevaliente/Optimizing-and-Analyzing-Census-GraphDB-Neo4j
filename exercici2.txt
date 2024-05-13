@@ -1,7 +1,23 @@
-//a) Per a cada padró (any) de Sant Feliu de Llobregat (SFLL), retorna l’any de padró, el número d'habitants, i la llista de cognoms. Elimina duplicats i “nan”.
+//a
+#opcio 1 -> no filtrem repetits entre llistes
+MATCH (i:INDIVIDUAL)-[v:VIU]->()
+WHERE v.Location="SFLL"
+WITH DISTINCT v.Year as Year, size(collect(i)) AS Habitants, collect(DISTINCT i.surname) + collect(DISTINCT i.second_surname) AS CognomsSenseFiltre
+WITH Year, Habitants, [cognom IN CognomsSenseFiltre WHERE cognom <> "nan"] AS Cognoms
+RETURN Year, Habitants, Cognoms
+ORDER BY Year
 
+#opcio 2 -> fem dues llistes (ineficient)
+MATCH (i:INDIVIDUAL)-[v:VIU]->()
+WHERE v.Location="SFLL"
+WITH DISTINCT v.Year as Year, size(collect(i)) AS Habitants, collect(DISTINCT i.surname) + collect(DISTINCT i.second_surname) AS CognomsSenseFiltre
+WITH Year, Habitants, [cognom IN CognomsSenseFiltre WHERE cognom <> "nan" | cognom] AS CognomsSenseDistinct
+WITH Year, Habitants, COLLECT(DISTINCT CognomsSenseDistinct) AS Cognoms
+RETURN Year, Habitants, head(Cognoms)
+ORDER BY Year;
 
-//uso del indice de texto:
+//b
+#uso del indice de texto:
 CALL db.index.fulltext.queryNodes('IndividualNameIndex', 'Juan Magan Rodríguez')
 YIELD node, score
 RETURN id(node), node.name, node.surname, node.second_surname, score;
