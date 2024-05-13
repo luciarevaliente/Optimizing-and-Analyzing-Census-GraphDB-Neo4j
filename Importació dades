@@ -21,26 +21,26 @@ WITH row WHERE row.Id <> "null"
 MERGE (i:INDIVIDUAL { Id: row.Id, Year: toInteger(row.Year), name: row.name, surname: row.surname, second_surname: row.second_surname });
 
 //Arestes
-LOAD CSV WITH HEADERS FROM 'file:\VIU.csv' AS row
-WITH row WHERE NOT row.IND IS "null" AND NOT row.HOUSE_ID IS "null"
+LOAD CSV WITH HEADERS FROM 'file:///VIU.csv' AS row
+WITH row WHERE row.IND <> "null" AND row.HOUSE_ID <> "null"
 MATCH (i:INDIVIDUAL), (h:HABITATGES)
 WHERE row.IND = i.Id AND row.HOUSE_ID = h.Id_Llar
 CREATE (i)-[:VIU {Location:row.Location,Year: row.Year}]->(h);
 
-LOAD CSV WITH HEADERS FROM 'file:\SAME_AS.csv' AS row
-WITH row WHERE NOT row.Id_A IS "null" AND NOT row.Id_B IS "null"
+LOAD CSV WITH HEADERS FROM 'file:///SAME_AS.csv' AS row
+WITH row WHERE row.Id_A <> "null" AND row.Id_B <> "null"
 MATCH (a:INDIVIDUAL),(b:INDIVIDUAL)
-WHERE row.Id_A = a.Id AND row.Id_B=b.Id 
+WHERE row.Id_A = a.Id AND row.Id_B = b.Id
 CREATE (a)-[:SAME_AS]->(b);
 
-LOAD CSV WITH HEADERS FROM 'file:\SAME_AS.csv' AS row
-WITH row WHERE NOT row.Id_A IS "null" AND NOT row.Id_B IS "null"
+LOAD CSV WITH HEADERS FROM 'file:///SAME_AS.csv' AS row
+WITH row WHERE row.Id_A <> "null" AND row.Id_B <> "null"
 MATCH (a:INDIVIDUAL),(b:INDIVIDUAL)
-WHERE row.Id_A = a.Id AND row.Id_B=b.Id 
+WHERE row.Id_A = a.Id AND row.Id_B = b.Id
 CREATE (b)-[:SAME_AS]->(a);
 
-LOAD CSV WITH HEADERS FROM 'file:\FAMILIA.csv' AS row
-WITH row WHERE NOT row.ID_1 IS "null" AND NOT row.ID_2 IS "null"
-MATCH (a:INDIVIDUAL),(b:INDIVIDUAL)
-WHERE row.ID_1 = a.Id AND row.Id_2=b.Id 
-CREATE (a)-[:FAMILIA{Relacio: row.Relacio, Relacio_Harmonitzada : row.Relacio_Harmonitzada}]->(b);
+LOAD CSV WITH HEADERS FROM 'file:///FAMILIA.csv' AS row
+WITH row WHERE row.ID_1 <> "null" AND row.ID_2 <> "null"
+MATCH (a:INDIVIDUAL), (b:INDIVIDUAL)
+WHERE row.ID_1 = a.Id AND row.ID_2 = b.Id
+CREATE (a)-[:FAMILIA {Relacio: row.Relacio, Relacio_Harmonitzada: row.Relacio_Harmonitzada}]->(b);
