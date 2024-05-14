@@ -13,7 +13,7 @@ CREATE FULLTEXT INDEX IndividuNomCognoms FOR (i:INDIVIDUAL) ON EACH [i.name, i.s
 // Importar dades dels habitatges
 LOAD CSV WITH HEADERS FROM 'file:\HABITATGES.csv' AS row
 WITH row WHERE row.Id_Llar <> "null" AND row.Municipi <> "null"
-MERGE (h:HABITATGES { Municipi: row.Municipi, Id_Llar: row.Id_Llar, Any_Padro: toInteger(row.Any_Padro), Carrer: row.Carrer, Numero: row.Numero });
+MERGE (h:HABITATGES { Municipi: row.Municipi, Id_Llar: row.Id_Llar, Any_Padro: toInteger(row.Any_Padro), Carrer: row.Carrer, Numero: toIntegeer(row.Numero) });
 
 // Importar dades dels individus
 LOAD CSV WITH HEADERS FROM 'file:\INDIVIDUAL.csv' AS row
@@ -25,7 +25,7 @@ LOAD CSV WITH HEADERS FROM 'file:///VIU.csv' AS row
 WITH row WHERE row.IND <> "null" AND row.HOUSE_ID <> "null"
 MATCH (i:INDIVIDUAL), (h:HABITATGES)
 WHERE row.IND = i.Id AND row.HOUSE_ID = h.Id_Llar
-CREATE (i)-[:VIU {Location:row.Location,Year: row.Year}]->(h);
+CREATE (i)-[:VIU {Location:row.Location,Year: toInteger(row.Year)}]->(h);
 
 LOAD CSV WITH HEADERS FROM 'file:///SAME_AS.csv' AS row
 WITH row WHERE row.Id_A <> "null" AND row.Id_B <> "null"
