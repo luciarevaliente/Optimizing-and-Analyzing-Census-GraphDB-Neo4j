@@ -1,20 +1,9 @@
 //a
-#opcio 1 -> no filtrem repetits entre llistes
 MATCH (i:INDIVIDUAL)-[v:VIU]->()
-WHERE v.Location="SFLL"
-WITH DISTINCT v.Year as Year, size(collect(i)) AS Habitants, collect(DISTINCT i.surname) + collect(DISTINCT i.second_surname) AS CognomsSenseFiltre
-WITH Year, Habitants, [cognom IN CognomsSenseFiltre WHERE cognom <> "nan"] AS Cognoms
-RETURN Year, Habitants, Cognoms
+WHERE v.Location="SFLL" AND i.surname<>"nan" AND i.second_surname<>"nan"
+WITH DISTINCT v.Year as Year, size(collect(i)) AS Habitants, collect(DISTINCT i.surname) + collect(DISTINCT i.second_surname) AS CognomsRepetits UNWIND CognomsRepetits as Surnames
+RETURN Year, Habitants, collect(DISTINCT Surnames) as Cognoms
 ORDER BY Year
-
-#opcio 2 -> fem dues llistes (ineficient)
-MATCH (i:INDIVIDUAL)-[v:VIU]->()
-WHERE v.Location="SFLL"
-WITH DISTINCT v.Year as Year, size(collect(i)) AS Habitants, collect(DISTINCT i.surname) + collect(DISTINCT i.second_surname) AS CognomsSenseFiltre
-WITH Year, Habitants, [cognom IN CognomsSenseFiltre WHERE cognom <> "nan" | cognom] AS CognomsSenseDistinct
-WITH Year, Habitants, COLLECT(DISTINCT CognomsSenseDistinct) AS Cognoms
-RETURN Year, Habitants, head(Cognoms)
-ORDER BY Year;
 
 //b
 #uso del indice de texto:
