@@ -33,12 +33,6 @@ MATCH (a:INDIVIDUAL),(b:INDIVIDUAL)
 WHERE row.Id_A = a.Id AND row.Id_B = b.Id
 CREATE (a)-[:SAME_AS]->(b);
 
-LOAD CSV WITH HEADERS FROM 'file:///SAME_AS.csv' AS row
-WITH row WHERE row.Id_A <> "null" AND row.Id_B <> "null"
-MATCH (a:INDIVIDUAL),(b:INDIVIDUAL)
-WHERE row.Id_A = a.Id AND row.Id_B = b.Id
-CREATE (b)-[:SAME_AS]->(a);
-
 LOAD CSV WITH HEADERS FROM 'file:///FAMILIA.csv' AS row
 WITH row WHERE row.ID_1 <> "null" AND row.ID_2 <> "null"
 MATCH (a:INDIVIDUAL), (b:INDIVIDUAL)
