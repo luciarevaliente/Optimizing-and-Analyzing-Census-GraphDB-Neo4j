@@ -1,15 +1,24 @@
-//a
+//a  -> se filtra demasiado, incorrecto
 MATCH (i:INDIVIDUAL)-[v:VIU]->()
-WHERE v.Location="SFLL" AND i.surname<>"nan" AND i.second_surname<>"nan"
-WITH DISTINCT v.Year as Year, size(collect(i)) AS Habitants, collect(DISTINCT i.surname) + collect(DISTINCT i.second_surname) AS CognomsRepetits UNWIND CognomsRepetits as Surnames
+WHERE v.Location="SFLL" 
+    AND (i.surname<>"nan" AND i.second_surname<>"nan")
+    AND v.Year IS NOT NULL
+WITH DISTINCT v.Year as Year, 
+    size(collect(i)) AS Habitants, 
+    collect(DISTINCT i.surname) + collect(DISTINCT i.second_surname) AS CognomsRepetits UNWIND CognomsRepetits as Surnames
 RETURN Year, Habitants, collect(DISTINCT Surnames) as Cognoms
 ORDER BY Year
 
 //b
-#uso del indice de texto:
-CALL db.index.fulltext.queryNodes('IndividualNameIndex', 'Juan Magan Rodríguez')
-YIELD node, score
-RETURN id(node), node.name, node.surname, node.second_surname, score;
+CALL{CALL db.index.fulltext.queryNodes('IndividuNomCognoms', 'miguel estape bofill')
+    YIELD node, score
+    RETURN node
+    LIMIT 1
+} 
+WITH node
+MATCH (i2)<-[s1:SAME_AS]-(i:INDIVIDUAL)-[s2:SAME_AS]->(i3)
+WHERE i.name=node.name AND i.surname=node.surname AND i.second_surname=node.second_surname
+RETURN i, i2, i3
 
 //c - FUNCIONA
 CALL{
@@ -25,3 +34,7 @@ MATCH (n:INDIVIDUAL)-[f:FAMILIA]-(m:INDIVIDUAL)
 WHERE n = node AND f.Relacio IN ["hija", "hijo"]
 RETURN m.name, m.surname, m.second_surname, f.Relacio
 ORDER BY m.name
+
+//d
+
+//e
