@@ -13,7 +13,10 @@ CREATE FULLTEXT INDEX IndividuNomCognoms FOR (i:INDIVIDUAL) ON EACH [i.name, i.s
 // Importar dades dels habitatges
 LOAD CSV WITH HEADERS FROM 'file:\HABITATGES.csv' AS row
 WITH row WHERE row.Id_Llar <> "null" AND row.Municipi <> "null"
-MERGE (h:HABITATGES { Municipi: row.Municipi, Id_Llar: row.Id_Llar, Any_Padro: toInteger(row.Any_Padro), Carrer: row.Carrer, Numero: row.Numero });
+MERGE (h:HABITATGES { Municipi: row.Municipi, Id_Llar: row.Id_Llar, Any_Padro: toInteger(row.Any_Padro), Carrer: row.Carrer, 
+Numero: CASE  WHEN row.Numero <> "null" THEN toInteger(row.Numero) 
+               ELSE row.Numero 
+                END  });
 
 // Importar dades dels individus
 LOAD CSV WITH HEADERS FROM 'file:\INDIVIDUAL.csv' AS row
