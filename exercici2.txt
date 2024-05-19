@@ -38,3 +38,24 @@ ORDER BY m.name
 //d
 
 //e
+//lista donde cada línia es un año, una calle y el nº habitantes
+MATCH (i:INDIVIDUAL)-[v:VIU]->(h:HABITATGES)
+WHERE v.Location="SFLL" 
+RETURN v.Year as Any_Padro, h.Carrer as Carrer, count(i) as N_habitants
+ORDER BY Any_Padro, N_habitants
+
+// cada línea es un año donde se guarda una lista de diccionarios. cada dict tiene el nombre de la calle y el nº habitantes
+CALL{
+    MATCH (i:INDIVIDUAL)-[v:VIU]->(h:HABITATGES)
+    WHERE v.Location="SFLL" 
+    RETURN v.Year as Any_Padro, h.Carrer as Carrer, count(i) as Habitants
+}
+WITH Any_Padro, collect({carrer: Carrer, habitants: Habitants}) as Carrer_Habitants
+RETURN Any_Padro, Carrer_Habitants
+
+//guardar por si acaso
+CALL{
+    WITH Any_Padro, min(Carrer_Habitants.habitants) as min_hab
+    RETURN Any_Padro, min_hab
+}
+RETURN Any_Padro, min_hab
