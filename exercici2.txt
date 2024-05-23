@@ -33,8 +33,8 @@ CALL{
 } 
 WITH node
 MATCH (n:INDIVIDUAL)-[f:FAMILIA]-(m:INDIVIDUAL) 
-WHERE n = node AND f.Relacio IN ["hija", "hijo"]
-RETURN m.name, m.surname, m.second_surname, f.Relacio
+WHERE n = node AND f.Relacio_Harmonitzada IN ["fill", "filla"]
+RETURN m.name as Nom, m.surname as Cognom, m.second_surname as SegonCognom, f.Relacio_Harmonitzada as Relacio
 ORDER BY m.name
 
 //d
