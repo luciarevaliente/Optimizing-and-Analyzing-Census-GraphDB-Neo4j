@@ -11,16 +11,16 @@ WITH Year, Habitants, [cognom in Cognoms WHERE cognom <> "nan"] as CognomsFiltra
 RETURN Year, Habitants, CognomsFiltrats
 
 
-//b
+//b - FUNCIONA
 CALL{CALL db.index.fulltext.queryNodes('IndividuNomCognoms', 'miguel estape bofill')
     YIELD node, score
     RETURN node
     LIMIT 1
 } 
 WITH node
-MATCH (i2)<-[s1:SAME_AS]-(i:INDIVIDUAL)-[s2:SAME_AS]->(i3)
+MATCH (i:INDIVIDUAL)-[:SAME_AS]->(i2)
 WHERE i.name=node.name AND i.surname=node.surname AND i.second_surname=node.second_surname
-RETURN i, i2, i3
+RETURN i.name as Nom, collect(DISTINCT i2.surname) as PrimerCognom, collect(DISTINCT i2.second_surname) as SegonCognom
 
 //c - FUNCIONA
 CALL{
