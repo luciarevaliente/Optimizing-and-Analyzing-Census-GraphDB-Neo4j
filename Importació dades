@@ -8,6 +8,7 @@ CREATE CONSTRAINT id_llarExists FOR (h:HABITATGE) REQUIRE h.Id_Llar is NOT NULL;
 
 //Índex
 CREATE INDEX AnyPadroIndex FOR ()-[r:VIU]-() ON (r.Year)
+CREATE INDEX RelacioFamilia FOR ()-[f:FAMILIA]-() ON (f.Relacio_Harmonitzada)
 CREATE FULLTEXT INDEX IndividuNomCognoms FOR (i:INDIVIDUAL) ON EACH [i.name, i.surname, i.second_surname]
 
 // Importar dades dels habitatges
