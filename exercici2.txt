@@ -1,13 +1,15 @@
-//a  -> se filtra demasiado, incorrecto
-MATCH (i:INDIVIDUAL)-[v:VIU]->()
-WHERE v.Location="SFLL" 
-    AND (i.surname<>"nan" AND i.second_surname<>"nan")
-    AND v.Year IS NOT NULL
-WITH DISTINCT v.Year as Year, 
-    size(collect(i)) AS Habitants, 
-    collect(DISTINCT i.surname) + collect(DISTINCT i.second_surname) AS CognomsRepetits UNWIND CognomsRepetits as Surnames
-RETURN Year, Habitants, collect(DISTINCT Surnames) as Cognoms
-ORDER BY Year
+//a  - FUNCIONA
+CALL{MATCH (i:INDIVIDUAL)-[v:VIU]->()
+    WHERE v.Location="SFLL" AND v.Year IS NOT NULL
+    WITH v.Year as Year, 
+        size(collect(i)) AS Habitants, 
+        collect(DISTINCT i.surname) + collect(DISTINCT i.second_surname) AS CognomsRepetits UNWIND CognomsRepetits as Surnames 
+    RETURN Year, Habitants, collect(DISTINCT Surnames) as Cognoms
+    ORDER BY Year
+}
+WITH Year, Habitants, [cognom in Cognoms WHERE cognom <> "nan"] as CognomsFiltrats
+RETURN Year, Habitants, CognomsFiltrats
+
 
 //b
 CALL{CALL db.index.fulltext.queryNodes('IndividuNomCognoms', 'miguel estape bofill')
