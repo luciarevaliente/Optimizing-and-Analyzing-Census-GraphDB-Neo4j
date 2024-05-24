@@ -1,10 +1,10 @@
 //Constraints per unicitat
 CREATE CONSTRAINT unique_id_person FOR (i:INDIVIDUAL) REQUIRE i.Id is UNIQUE;
-CREATE CONSTRAINT unique_id_llar FOR (h:HABITATGE) REQUIRE h.Id_Llar is UNIQUE;
+CREATE CONSTRAINT unique_id_llar FOR (h:HABITATGES) REQUIRE h.Id_Llar is UNIQUE;
 
 //Constraints per que no sigui NULL la Id
 CREATE CONSTRAINT id_personExists FOR (i:INDIVIDUAL) REQUIRE i.Id is NOT NULL;
-CREATE CONSTRAINT id_llarExists FOR (h:HABITATGE) REQUIRE h.Id_Llar is NOT NULL;
+CREATE CONSTRAINT id_llarExists FOR (h:HABITATGES) REQUIRE h.Id_Llar is NOT NULL;
 
 //Índex
 CREATE INDEX AnyPadroIndex FOR ()-[r:VIU]-() ON (r.Year)
