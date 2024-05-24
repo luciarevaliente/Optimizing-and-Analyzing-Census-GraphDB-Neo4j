@@ -40,8 +40,15 @@ ORDER BY m.name
 //d
 
 //e
-//devuelve por cada año una lista de diccionarios: calle y habitantes
+CALL{
+    MATCH (i:INDIVIDUAL)-[v:VIU]->(h:HABITATGES)
+    WHERE v.Location="SFLL"
+    WITH v.Year as Any_Padro, h.Carrer as Carrer, count(i) as Habitants
+    RETURN Any_Padro,  min(Habitants) as minHabitants
+}
 MATCH (i:INDIVIDUAL)-[v:VIU]->(h:HABITATGES)
 WHERE v.Location="SFLL"
-WITH v.Year as Any_Padro, h.Carrer as Carrer, count(i) as Habitants
-RETURN Any_Padro, collect({carrer: Carrer, habitants: Habitants}) as Carrer_Habitants
+WITH v.Year as Padro, h.Carrer as Carrer, count(i) as Habitants, minHabitants, Any_Padro
+WHERE Habitants=minHabitants and Padro=Any_Padro
+RETURN Any_Padro, Carrer, Habitants
+ORDER BY Any_Padro
