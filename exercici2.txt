@@ -37,7 +37,13 @@ WHERE n = node AND f.Relacio_Harmonitzada IN ["fill", "filla"]
 RETURN m.name as Nom, m.surname as Cognom, m.second_surname as SegonCognom, f.Relacio_Harmonitzada as Relacio
 ORDER BY m.name
 
-//d
+//d - FUNCIONA
+MATCH (:HABITATGES)<-[v:VIU {Location: "CR"}]-(i:INDIVIDUAL)<-[f:FAMILIA]-(m:INDIVIDUAL)
+WHERE f.Relacio_Harmonitzada IN ["fill", "filla"]
+WITH i, count(f) as numFills
+WHERE numFills>=3
+RETURN i.name as Nom, i.surname as Cognom, i.second_surname as SegonCognom, numFills
+LIMIT 20
 
 //e - FUNCIONA
 CALL{
