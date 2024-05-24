@@ -39,7 +39,7 @@ ORDER BY m.name
 
 //d
 
-//e
+//e - FUNCIONA
 CALL{
     MATCH (i:INDIVIDUAL)-[v:VIU]->(h:HABITATGES)
     WHERE v.Location="SFLL"
