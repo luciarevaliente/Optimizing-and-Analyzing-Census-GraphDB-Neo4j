@@ -43,6 +43,7 @@ WHERE f.Relacio_Harmonitzada IN ["fill", "filla"]
 WITH i, count(f) as numFills
 WHERE numFills>=3
 RETURN i.name as Nom, i.surname as Cognom, i.second_surname as SegonCognom, numFills
+ORDER BY numFills DESC
 LIMIT 20
 
 //e - FUNCIONA
