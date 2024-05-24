@@ -1,5 +1,6 @@
 //a  - FUNCIONA
-CALL{MATCH (i:INDIVIDUAL)-[v:VIU]->()
+CALL{
+    MATCH (i:INDIVIDUAL)-[v:VIU]->()
     WHERE v.Location="SFLL" AND v.Year IS NOT NULL
     WITH v.Year as Year, 
         size(collect(i)) AS Habitants, 
@@ -12,12 +13,12 @@ RETURN Year, Habitants, CognomsFiltrats
 
 
 //b - FUNCIONA
-CALL{CALL db.index.fulltext.queryNodes('IndividuNomCognoms', 'miguel estape bofill')
+CALL{
+    CALL db.index.fulltext.queryNodes('IndividuNomCognoms', 'miguel estape bofill')
     YIELD node, score
     RETURN node
     LIMIT 1
 } 
-WITH node
 MATCH (i:INDIVIDUAL)-[:SAME_AS]->(i2)
 WHERE i.name=node.name AND i.surname=node.surname AND i.second_surname=node.second_surname
 RETURN i.name as Nom, collect(DISTINCT i2.surname) as PrimerCognom, collect(DISTINCT i2.second_surname) as SegonCognom
@@ -26,23 +27,21 @@ RETURN i.name as Nom, collect(DISTINCT i2.surname) as PrimerCognom, collect(DIST
 CALL{
     CALL db.index.fulltext.queryNodes('IndividuNomCognoms', 'benito julivert')
     YIELD node, score
-    WITH node, score
-    ORDER BY score DESC
     RETURN node
     LIMIT 1
 } 
-WITH node
 MATCH (n:INDIVIDUAL)-[f:FAMILIA]-(m:INDIVIDUAL) 
 WHERE n = node AND f.Relacio_Harmonitzada IN ["fill", "filla"]
-RETURN m.name as Nom, m.surname as Cognom, m.second_surname as SegonCognom, f.Relacio_Harmonitzada as Relacio
-ORDER BY m.name
+WITH m.name as Nom, m.surname as Cognom, m.second_surname as SegonCognom, f.Relacio_Harmonitzada as Relacio
+RETURN Nom, Cognom, SegonCognom, Relacio
+ORDER BY Nom
 
 //d - FUNCIONA
-MATCH (:HABITATGES)<-[v:VIU {Location: "CR"}]-(i:INDIVIDUAL)<-[f:FAMILIA]-(m:INDIVIDUAL)
+MATCH (:HABITATGES)<-[v:VIU {Location: "CR"}]-(i:INDIVIDUAL)<-[f:FAMILIA]-(:INDIVIDUAL)
 WHERE f.Relacio_Harmonitzada IN ["fill", "filla"]
-WITH i, count(f) as numFills
-WHERE numFills>=3
-RETURN i.name as Nom, i.surname as Cognom, i.second_surname as SegonCognom, numFills
+WITH i.name as Nom, i.surname as Cognom, i.second_surname as SegonCognom, count(f) as numFills
+WHERE numFills>3
+RETURN Nom, Cognom, SegonCognom, numFills
 ORDER BY numFills DESC
 LIMIT 20
 
