@@ -10,7 +10,7 @@ uri = "bolt://localhost:7687"
 usuario = "neo4j"
 contraseña = "Ojosgrandes_14"
 driver = GraphDatabase.driver(uri, auth=(usuario, contraseña))
-m = []
+
 # Llegim el fitxer CSV i obtenim la columna desitjada
 with open(MUNICIPIS, mode='r') as file_csv:
     lector_csv = csv.DictReader(file_csv)
