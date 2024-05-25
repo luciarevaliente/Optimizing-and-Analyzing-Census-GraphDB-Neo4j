@@ -1,7 +1,7 @@
 from neo4j import GraphDatabase
 import csv
 
-#################################################################
+########################################################################
 # Obtenció dels labels LOCALITAT
 MUNICIPIS = "dades/MUNICIPIS.csv"
 nom_columna = "Municipi"
@@ -20,11 +20,11 @@ print("Dades de la columna '{}':".format(nom_columna))
 for label in labels:
     print(label)
 
-#################################################################
+########################################################################
 # Creació dels nodes amb label LOCALITAT (dinàmic)
 uri = "bolt://localhost:7687"
 usuario = "neo4j"
-contraseña = "Ojosgrandes_14"
+contraseña = "<contrasenya>"
 driver = GraphDatabase.driver(uri, auth=(usuario, contraseña))
 
 # Construim la consulta Cypher amb label dinàmic
