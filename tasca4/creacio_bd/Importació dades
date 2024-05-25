@@ -1,0 +1,39 @@
+//Constraints per unicitat
+CREATE CONSTRAINT unique_id_person FOR (i:INDIVIDUAL) REQUIRE i.Id is UNIQUE;
+CREATE CONSTRAINT unique_id_habitatges FOR (h:HABITATGES) REQUIRE h.Id is UNIQUE;
+
+//Constraints per que no sigui NULL la Id
+CREATE CONSTRAINT id_personExists FOR (i:INDIVIDUAL) REQUIRE i.Id is NOT NULL;
+CREATE CONSTRAINT id_llarExists FOR (h:HABITATGES) REQUIRE h.Id_Llar is NOT NULL;
+
+// Importar dades dels habitatges
+LOAD CSV WITH HEADERS FROM 'file:\HABITATGES.csv' AS row
+WITH row WHERE row.Id_Llar <> "null" AND row.Municipi <> "null"
+MERGE (h:HABITATGES { Municipi: row.Municipi, 
+                      Id_Llar: row.Id_Llar, 
+                      Any_Padro: toInteger(row.Any_Padro), 
+                      Carrer: row.Carrer, 
+                      Numero: CASE WHEN row.Numero <> "null" THEN toInteger(row.Numero) 
+                              ELSE row.Numero 
+                              END  });
+
+// Importar dades dels individus
+LOAD CSV WITH HEADERS FROM 'file:\INDIVIDUAL.csv' AS row
+WITH row WHERE row.Id <> "null" 
+MERGE (i:INDIVIDUAL { Id: row.Id, 
+                      Year: toInteger(row.Year), 
+                      name: row.name, 
+                      surname: row.surname, 
+                      second_surname: row.second_surname });
+
+LOAD CSV WITH HEADERS FROM 'file:///SAME_AS.csv' AS row
+WITH row WHERE row.Id_A <> "null" AND row.Id_B <> "null"
+MATCH (a:INDIVIDUAL),(b:INDIVIDUAL)
+WHERE row.Id_A = a.Id AND row.Id_B = b.Id
+CREATE (a)-[:SAME_AS]->(b);
+
+LOAD CSV WITH HEADERS FROM 'file:///FAMILIA.csv' AS row
+WITH row WHERE row.ID_1 <> "null" AND row.ID_2 <> "null"
+MATCH (a:INDIVIDUAL), (b:INDIVIDUAL)
+WHERE row.ID_1 = a.Id AND row.ID_2 = b.Id
+CREATE (a)-[:FAMILIA {Relacio: row.Relacio, Relacio_Harmonitzada: row.Relacio_Harmonitzada}]->(b);
