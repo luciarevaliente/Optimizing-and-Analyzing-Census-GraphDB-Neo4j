@@ -8,7 +8,7 @@ MUNICIPIS = "dades/HABITATGES.csv"
 # Connexió amb Neo4j
 uri = "bolt://localhost:7687"
 usuario = "neo4j"
-contraseña = "Ojosgrandes_14"
+contraseña = "<contrasenya>"
 driver = GraphDatabase.driver(uri, auth=(usuario, contraseña))
 
 # Llegim el fitxer CSV i obtenim la columna desitjada
