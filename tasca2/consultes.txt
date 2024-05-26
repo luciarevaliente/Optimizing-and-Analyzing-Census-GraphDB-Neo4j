@@ -30,7 +30,7 @@ CALL{
     RETURN node
     LIMIT 1
 } 
-MATCH (n:INDIVIDUAL)-[f:FAMILIA]-(m:INDIVIDUAL) 
+MATCH (n:INDIVIDUAL)<-[f:FAMILIA]-(m:INDIVIDUAL) 
 WHERE n = node AND f.Relacio_Harmonitzada IN ["fill", "filla"]
 WITH m.name as Nom, m.surname as Cognom, m.second_surname as SegonCognom, f.Relacio_Harmonitzada as Relacio
 RETURN Nom, Cognom, SegonCognom, Relacio
