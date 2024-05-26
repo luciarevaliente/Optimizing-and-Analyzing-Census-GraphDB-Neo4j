@@ -14,11 +14,6 @@ with open(HABITATGES, mode='r', newline='', encoding='utf-8') as file:
         if municipi != "null" and [municipi] not in municipis:
             municipis.append([municipi])
 
-        id_llar = row['Id_Llar']
-        any_padro = row['Any_Padro']
-
-        # print(f'Municipi: {municipi}, Id_Llar: {id_llar}, Any_Padro: {any_padro}')
-
 #########################################################################
 # Creació fitxer MUNICIPIS.csv
 MUNICIPIS = "dades/MUNICIPIS.csv"  # Nom del fitxer CSV a crear
