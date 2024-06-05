@@ -1,0 +1,18 @@
+//creem un project on ignorem SAME_AS i FAMILIA
+CALL gds.graph.project(
+'grafWCC',
+['INDIVIDUAL', 'HABITATGES'],
+{VIU: { type: 'VIU', orientation: 'UNDIRECTED'}})
+
+//stream per calcular les weakly connected components i la primera query
+CALL gds.wcc.stream('grafWCC')
+YIELD nodeId, componentId
+WITH componentId, count(nodeId) AS componentSize
+RETURN componentId, componentSize
+ORDER BY componentSize DESC
+LIMIT 10;
+
+//segona query, relacio i-h
+MATCH (i:INDIVIDUAL)-[r:VIU]->(h:HABITATGES)
+RETURN h.Municipi as municipi, r.Year as anyParella, count(*) as numParelles
+ORDER BY municipi, anyParella ASC;
