@@ -1,1 +1,47 @@
-//Consultes Tasca 3b
+// Afegir arestes MATEIX_HAB entre els habitatges amb el mateix Id_Llar 
+MATCH (h1:HABITATGES), (h2:HABITATGES)
+WHERE h1.Id_Llar = h2.Id_Llar
+  AND h1.Any_Padro < h2.Any_Padro
+MERGE (h1)-[:MATEIX_HAB]->(h2)
+
+// Creació del nou subgraf
+CALL gds.graph.project(
+  'subgrafo',
+  ['INDIVIDUAL', 'HABITATGES'],
+  {
+    VIU: {
+      type: 'VIU',
+      orientation: 'UNDIRECTED'
+    },
+    FAMILIA: {
+      type: 'FAMILIA',
+      orientation: 'UNDIRECTED'
+    },
+    MATEIX_HAB: {
+      type: 'MATEIX_HAB',
+      orientation: 'UNDIRECTED'
+    }
+  }
+)
+YIELD graphName, nodeCount, relationshipCount
+
+// Càlcul de similaritat entre nodes
+CALL gds.nodeSimilarity.stream('subgrafo')
+YIELD node1, node2, similarity
+WITH gds.util.asNode(node1) AS node1, gds.util.asNode(node2) AS node2, similarity
+WHERE node1:INDIVIDUAL AND node2:INDIVIDUAL
+MERGE (node1)-[:SIMILAR_A {similitud: similarity}]->(node2)
+
+// Busqueda de nodes iguals segons similaritat amb similaritat total
+MATCH ()-[r:SIMILAR_A]->()
+WHERE r.similitud = 1
+RETURN count(r) AS totalSimilitudes1
+
+// Busqueda de nodes iguals segons similaritat amb threshhold del 83%
+MATCH ()-[r:SIMILAR_A]->()
+WHERE r.similitud > 0.83
+RETURN count(r) AS totalSimilitudes1
+
+// Busqueda de nodes iguals segons les dades originals
+MATCH ()-[r:SAME_AS|MATEIX_HAB]->()
+RETURN count(r) AS totalSimilitudes1;
