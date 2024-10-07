@@ -1,6 +1,8 @@
 # Descripción en castellano:
 Este repositorio contiene un proyecto enfocado en el análisis y optimización de bases de datos no relacionales utilizando Neo4j, una base de datos orientada a grafos. El objetivo principal es estudiar la evolución socioeconómica de una población a partir de los padrones históricos de habitantes, documentos que recogen información personal como nombres, apellidos, edades y otros detalles demográficos. 
 
+En el documento pdf `enunciat.pdf` se plantea el proyecto de manera extensa. En el docx `memoria.docx` se expone todo el procedimiento, junto con el análisis de resultados. En la presentación `presentacio.pptx` se muestra de forma estética y resumida las querys y conclusiones del trabajo.
+
 ## Estructura del proyecto:
 ### Primera parte: 
 Esta fase consta de tres tareas principales, todos realizados directamente en **Neo4j**. A cada tarea (tasca) le corresponde una directorio del repositorio:
