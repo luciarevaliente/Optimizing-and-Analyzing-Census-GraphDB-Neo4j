@@ -1,4 +1,4 @@
-En aquest document expliquem els passos d'execució de cada fitxer.
+En aquest document expliquem els passos d'execució de cada fitxer contingut en la carpeta creacio_bd.
 
 En Neo4j:
 1. importacio_csv.txt 
