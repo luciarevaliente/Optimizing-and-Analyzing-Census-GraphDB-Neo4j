@@ -9,3 +9,6 @@ Esta fase consta de tres tareas principales, todos realizados directamente en **
 3. `tasca3:` Consultas mediante **analítica de grafos**, donde se aplican técnicas avanzadas para analizar las relaciones y patrones en los datos.
     
 ### Segunda parte:
+En esta fase del proyecto, nos hemos propuesto **rediseñar la base de datos** con el objetivo de visualizar de manera más eficiente la **evolución demográfica** de cada población. Este rediseño implica la creación de una nueva estructura que organiza los datos en función de las consultas que se desean realizar, lo que permite reflejar de manera más precisa las relaciones entre las personas, sus hogares y las localidades en las que viven. 
+
+Con estas modificaciones, la base de datos será capaz de ofrecer una comprensión más clara de los datos demográficos, mejorando la capacidad para realizar consultas que capturen las interacciones y cambios en la población a lo largo del tiempo. Además, mejoraremos la **escalabilidad** y **eficiencia** de la BD.
