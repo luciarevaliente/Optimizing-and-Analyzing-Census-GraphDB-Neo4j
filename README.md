@@ -4,11 +4,8 @@ Este repositorio contiene un proyecto enfocado en el análisis y optimización d
 ## Estructura del proyecto:
 ### Primera parte: 
 Esta fase consta de tres tareas principales, todos realizados directamente en **Neo4j**. A cada tarea (tasca) le corresponde una directorio del repositorio:
-1. 'tasca1:' **Importación** de los datos desde ficheros CSV, añadiendo índices y restricciones a la base de datos para mejorar su rendimiento. Las querys ejecutadas se encuentran
-    - **tasca1**: `Importación de la BD`
-2. 'tasca2:' **Consultas** sobre la base de datos proporcionada, evaluando el rendimiento de las consultas realizadas.
-    - **tasca2**: `Consultas sobre la BD`
-3. **tasca3: **consultas mediante **analítica de grafos**, donde se aplican técnicas avanzadas para analizar las relaciones y patrones en los datos.
-    - **tasca3**: `Analítica de grafos sobre la BD`
+1. `tasca1:` **Importación** de los datos desde ficheros CSV, añadiendo índices y restricciones a la base de datos para mejorar su rendimiento. Las querys ejecutadas se encuentran
+2. `tasca2:` **Consultas** sobre la base de datos proporcionada, evaluando el rendimiento de las consultas realizadas.
+3. `tasca3:` Consultas mediante **analítica de grafos**, donde se aplican técnicas avanzadas para analizar las relaciones y patrones en los datos.
     
 ### Segunda parte:
